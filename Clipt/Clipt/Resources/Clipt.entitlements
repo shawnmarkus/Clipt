@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!--
+    ══════════════════════════════════════════════════════
+     Clipt.entitlements
+     Applies to both Debug and Release builds.
+     For App Store builds copy these into
+     Clipt-Release.entitlements and keep the sandbox on.
+     For direct-download (notarized) builds you may disable
+     the sandbox, but it is recommended to keep it.
+    ══════════════════════════════════════════════════════
+    -->
+
+    <!-- macOS App Sandbox — keep this ON for App Store -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+
+    <!-- Read/write access to the user's own app-container files -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!--
+      Outgoing network connections — needed only if you later add
+      cloud sync; remove if you keep Clipt fully local.
+    -->
+    <!-- <key>com.apple.security.network.client</key> -->
+    <!-- <true/> -->
+
+    <!--
+      Automation (Apple Events) — needed to query the frontmost app
+      so we can exclude password managers.
+      Note: macOS 10.14+ shows a one-time permission dialog.
+    -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+
+    <!--
+      Temporary exception: read pasteboard data outside the sandbox.
+      Required for clipboard monitoring.
+    -->
+    <key>com.apple.security.temporary-exception.sbpl</key>
+    <array>
+        <string>(allow iokit-open (iokit-user-client-class "IOHIDParamUserClient"))</string>
+    </array>
+
+    <!--
+      SMAppService / Login Items — required for "Launch at Login"
+      on macOS 13+.  Add this entitlement AND declare the helper
+      in the Xcode project's "Login Items & Extensions" capability.
+    -->
+    <!-- <key>com.apple.security.application-groups</key> -->
+    <!-- <array><string>$(TeamIdentifierPrefix)com.yourname.clipt</string></array> -->
+
+    <!--
+      Hardened Runtime — required for notarization.
+      These two keys allow the dynamic code generation that
+      Swift runtime and JIT use.
+    -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <false/>
+
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <false/>
+
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <false/>
+
+</dict>
+</plist>

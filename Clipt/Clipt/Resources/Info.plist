@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ── Identity ─────────────────────────────────────────── -->
+    <key>CFBundleIdentifier</key>
+    <string>com.shawnpersonal.Clipt</string>
+
+    <key>CFBundleName</key>
+    <string>Clipt</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>Clipt</string>
+
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+
+    <!-- ── CRITICAL: Hide from Dock and App Switcher ────────── -->
+    <!--  LSUIElement = true  →  pure menu-bar app.             -->
+    <!--  No Dock icon, no ⌘-Tab entry. The ONLY visible        -->
+    <!--  presence is the NSStatusItem in the menu bar.         -->
+    <key>LSUIElement</key>
+    <true/>
+
+    <!-- ── macOS minimum version ────────────────────────────── -->
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0</string>
+
+    <!-- ── Prevent multiple instances ──────────────────────── -->
+    <key>LSMultipleInstancesProhibited</key>
+    <true/>
+
+    <!-- ── Privacy usage descriptions ──────────────────────── -->
+    <!--  macOS requires these strings for App Store submission  -->
+    <!--  and for the system permission dialogs.                 -->
+
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Clipt uses Apple Events to detect the frontmost application so it can exclude password managers from clipboard monitoring.</string>
+
+    <key>NSAccessibilityUsageDescription</key>
+    <string>Clipt needs Accessibility access to detect the frontmost app and to paste your selected clipboard item automatically.</string>
+
+    <key>NSUserNotificationUsageDescription</key>
+    <string>Clipt can show a brief notification when a new item is copied to your clipboard.</string>
+
+    <!-- ── App category (App Store) ─────────────────────────── -->
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
+
+    <!-- ── High-resolution display support ──────────────────── -->
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <!-- ── Support Dark Mode ────────────────────────────────── -->
+    <key>NSRequiresAquaSystemAppearance</key>
+    <false/>
+
+    <!-- ── Principal class ──────────────────────────────────── -->
+    <!--  SwiftUI @main handles this, but explicit is safer.    -->
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+
+</dict>
+</plist>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+═══════════════════════════════════════════════════════════════
+ com.clipt.daemon.plist  —  LaunchAgent template
+ (Used automatically on macOS 12 and earlier by LaunchAtLoginManager.swift)
+ (On macOS 13+ the app uses SMAppService instead — no plist needed)
+
+ Manual installation (if needed):
+   cp com.clipt.daemon.plist ~/Library/LaunchAgents/
+   launchctl load -w ~/Library/LaunchAgents/com.clipt.daemon.plist
+
+ Manual removal:
+   launchctl unload -w ~/Library/LaunchAgents/com.clipt.daemon.plist
+   rm ~/Library/LaunchAgents/com.clipt.daemon.plist
+═══════════════════════════════════════════════════════════════
+-->
+<dict>
+
+    <!-- Unique reverse-DNS label — must match bundle ID prefix -->
+    <key>Label</key>
+    <string>com.clipt.daemon</string>
+
+    <!-- Absolute path to the Clipt executable inside the .app bundle -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Applications/Clipt.app/Contents/MacOS/Clipt</string>
+    </array>
+
+    <!-- Start immediately when the plist is loaded (and at every login) -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!--
+      KeepAlive: restart the process if it exits for any reason
+      other than a clean exit (exit code 0).
+      This implements the "restart on crash" behaviour.
+    -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <!-- Run as a background agent, not an interactive GUI app -->
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <!-- Throttle restart — wait 10 s before re-launching on crash -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <!-- Redirect stdout / stderr to log files -->
+    <key>StandardOutPath</key>
+    <string>~/Library/Logs/Clipt/stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>~/Library/Logs/Clipt/stderr.log</string>
+
+    <!--
+      Environment variable so the app can detect it was launched
+      by launchd (daemon mode) vs. directly by the user.
+    -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>CLIPT_DAEMON</key>
+        <string>1</string>
+    </dict>
+
+    <!--
+      Optional: working directory.
+      Defaults to / when launched by launchd.
+    -->
+    <key>WorkingDirectory</key>
+    <string>/tmp</string>
+
+</dict>
+</plist>
