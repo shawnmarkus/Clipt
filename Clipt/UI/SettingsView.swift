@@ -584,7 +584,7 @@ struct DaemonTab: View {
                     .frame(width: 30, height: 30)
                     VStack(alignment: .leading, spacing: 1) {
                         Text("Uninstall Clipt").font(.system(size: 13))
-                        Text("Removes Login Item, deletes history and config, moves app to Trash.")
+                        Text("Removes Login Item, deletes data, and reveals the app so you can delete it.")
                             .font(.system(size: 11)).foregroundStyle(.secondary)
                     }
                     Spacer()
@@ -601,19 +601,31 @@ struct DaemonTab: View {
                 Button("Uninstall", role: .destructive) { performUninstall() }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("This will remove the Login Item, delete all clipboard history and settings, and move Clipt.app to the Trash.")
+                Text("This will remove the Login Item and delete all clipboard history and settings. The folder containing Clipt will then open so you can safely move it to the Trash.")
             }
         }
     }
 
     private func performUninstall() {
+        // 1. Disable launch at login
         LaunchAtLoginManager.setEnabled(false)
+        
+        // 2. Delete the Application Support folder (history data)
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Clipt")
         try? FileManager.default.removeItem(at: support)
-        if let url = Bundle.main.bundleURL as URL? {
-            NSWorkspace.shared.recycle([url]) { _, _ in NSApp.terminate(nil) }
+        
+        // 3. Clear all UserDefaults (settings)
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
+        
+        // 4. Reveal the app in Finder so the user can easily delete it
+        let appURL = Bundle.main.bundleURL
+        NSWorkspace.shared.activateFileViewerSelecting([appURL])
+        
+        // 5. Quit the app immediately so the file is unlocked
+        NSApplication.shared.terminate(nil)
     }
 }
 
