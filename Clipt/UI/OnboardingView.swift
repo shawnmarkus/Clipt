@@ -204,8 +204,8 @@ final class OnboardingWindowController: NSWindowController {
 
         self.init(window: window)
 
-        let view = OnboardingView { [weak self] in
-            self?.close()
+        let view = OnboardingView { [weak window] in
+                    window?.close()
         }
         window.contentView = NSHostingView(rootView: view)
     }
